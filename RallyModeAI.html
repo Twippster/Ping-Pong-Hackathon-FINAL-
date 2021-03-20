@@ -15,8 +15,7 @@
   var ballSpeedX = 15;
   var ballSpeedY = 10;
 
-  var player1Score = 0;
-  var player2Score = 0;
+  var rallyScore = 0;
   const WINNING_SCORE = 10;
 
   var showingWinScreen = false;
@@ -39,8 +38,7 @@
 
   function handleMouseClick(evt) {
     if (showingWinScreen) {
-      player1Score = 0;
-      player2Score = 0;
+      rallyScore = 0;
       showingWinScreen = false;
     }
   }
@@ -67,7 +65,7 @@
   };
 
   function ballReset() {
-    if (player1Score >= WINNING_SCORE || player2Score >= WINNING_SCORE) {
+    if (rallyScore >= WINNING_SCORE) {
       showingWinScreen = true;
     }
 
@@ -79,9 +77,9 @@
   function computerMovement() {
     var paddle2YCenter = paddle2Y + PADDLE_HEIGHT / 2;
     if (paddle2YCenter < ballY - 35) {
-      paddle2Y += 10;
+      paddle2Y += 15;
     } else if (paddle2YCenter > ballY + 35) {
-      paddle2Y -= 10;
+      paddle2Y -= 15;
     }
   }
 
@@ -99,8 +97,10 @@
 
         var deltaY = ballY - (paddle1Y + PADDLE_HEIGHT / 2);
         ballSpeedY = deltaY * 0.35;
+
+        rallyScore++;
       } else {
-        player2Score++;
+        rallyScore--;
         ballReset();
       }
     }
@@ -111,8 +111,10 @@
 
         var deltaY = ballY - (paddle2Y + PADDLE_HEIGHT / 2);
         ballSpeedY = deltaY * 0.35;
+        
+        rallyScore++;
       } else {
-        player1Score++;
+        rallyScore--;
         ballReset();
       }
     }
@@ -140,15 +142,9 @@
       cc.fillStyle = "white";
       cc.font = "50px Arial";
 
-      if (player1Score >= WINNING_SCORE) {
+      if (rallyScore >= WINNING_SCORE) {
         cc.fillText(
           "You have won the game! Click anywhere on the screen to play again!",
-          400,
-          200
-        );
-      } else if (player2Score >= WINNING_SCORE) {
-        cc.fillText(
-          "You have lost the game! Click anywhere on the screen to play again!",
           400,
           200
         );
@@ -169,8 +165,8 @@
     colorCircle(ballX, ballY, 10, "white");
 
     cc.font = "50px Arial";
-    cc.fillText(player1Score, 100, 100);
-    cc.fillText(player2Score, c.width - 100, 100);
+    cc.fillStyle = "red";
+    cc.fillText(rallyScore, 948, 500);
   }
 
   function colorRect(leftX, topY, width, height, drawColor) {
